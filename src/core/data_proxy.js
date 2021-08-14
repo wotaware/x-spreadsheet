@@ -826,9 +826,8 @@ export default class DataProxy {
   }
 
   // type: row | column
-  insert(type, n = 1) {
+  insertTo(type, { sri, sci }, n) {
     this.changeData(() => {
-      const { sri, sci } = this.selector.range;
       const { rows, merges, cols } = this;
       let si = sri;
       if (type === 'row') {
@@ -844,6 +843,10 @@ export default class DataProxy {
         cell.merge[1] += cn;
       });
     });
+  }
+
+  insert(type, n = 1) {
+    this.insertTo(type, this.selector.range, n);
   }
 
   // type: row | column

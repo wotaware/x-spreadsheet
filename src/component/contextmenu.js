@@ -3,7 +3,7 @@ import { bindClickoutside, unbindClickoutside } from './event';
 import { cssPrefix } from '../config';
 import { tf } from '../locale/locale';
 
-const menuItems = [
+const defaultMenuItems = [
   { key: 'copy', title: tf('contextmenu.copy'), label: 'Ctrl+C' },
   { key: 'cut', title: tf('contextmenu.cut'), label: 'Ctrl+X' },
   { key: 'paste', title: tf('contextmenu.paste'), label: 'Ctrl+V' },
@@ -16,7 +16,7 @@ const menuItems = [
   { key: 'delete-row', title: tf('contextmenu.deleteRow') },
   { key: 'delete-column', title: tf('contextmenu.deleteColumn') },
   { key: 'delete-cell-text', title: tf('contextmenu.deleteCellText') },
-  { key: 'hide', title: tf('contextmenu.hide') },
+  { key: 'hide', title: tf('contextmenu.hide'), available: mode => mode === 'col-title' || mode === 'row-title' },
   { key: 'divider' },
   { key: 'validation', title: tf('contextmenu.validation') },
   { key: 'divider' },
@@ -33,7 +33,7 @@ function buildMenuItem(item) {
   }
   return h('div', `${cssPrefix}-item`)
     .on('click', () => {
-      this.itemClick(item.key);
+      this.itemClick(item.key, item.handler);
       this.hide();
     })
     .children(
@@ -42,13 +42,14 @@ function buildMenuItem(item) {
     );
 }
 
-function buildMenu() {
+function buildMenu(menuItems) {
   return menuItems.map(it => buildMenuItem.call(this, it));
 }
 
 export default class ContextMenu {
-  constructor(viewFn, isHide = false) {
-    this.menuItems = buildMenu.call(this);
+  constructor(viewFn, menuItems = defaultMenuItems, isHide = false) {
+    this.menuItemOptions = menuItems;
+    this.menuItems = buildMenu.call(this, menuItems);
     this.el = h('div', `${cssPrefix}-contextmenu`)
       .children(...this.menuItems)
       .hide();
@@ -58,15 +59,27 @@ export default class ContextMenu {
     this.setMode('range');
   }
 
-  // row-col: the whole rows or the whole cols
+  // col-title: the whole rows
+  // row-title: the whole cols
   // range: select range
   setMode(mode) {
-    const hideEl = this.menuItems[12];
-    if (mode === 'row-col') {
-      hideEl.show();
-    } else {
-      hideEl.hide();
-    }
+    const availableMenuItems = [];
+    this.menuItemOptions.forEach(({ available }, index) => {
+      let itemVisible;
+      if (typeof available === 'function') {
+        itemVisible = available(mode);
+      } else {
+        itemVisible = available !== false;
+      }
+      const menuItem = this.menuItems[index];
+      if (itemVisible) {
+        availableMenuItems.push(menuItem);
+        menuItem.show();
+      } else {
+        menuItem.hide();
+      }
+    });
+    this.availableMenuItems = availableMenuItems;
   }
 
   hide() {
@@ -76,7 +89,7 @@ export default class ContextMenu {
   }
 
   setPosition(x, y) {
-    if (this.isHide) return;
+    if (this.isHide || this.availableMenuItems.length === 0) return;
     const { el } = this;
     const { width } = el.show().offset();
     const view = this.viewFn();

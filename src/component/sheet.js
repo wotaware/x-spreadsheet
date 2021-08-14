@@ -73,7 +73,15 @@ function selectorSet(multiple, ri, ci, indexesUpdated = true, moving = false) {
     table, selector, toolbar, data,
     contextMenu,
   } = this;
-  contextMenu.setMode((ri === -1 || ci === -1) ? 'row-col' : 'range');
+  let menuMode;
+  if (ri === -1) {
+    menuMode = 'col-title';
+  } else if (ci === -1) {
+    menuMode = 'row-title';
+  } else {
+    menuMode = 'range';
+  }
+  contextMenu.setMode(menuMode);
   const cell = data.getCell(ri, ci);
   if (multiple) {
     selector.setEnd(ri, ci, moving);
@@ -498,7 +506,7 @@ function dataSetCellText(text, state = 'finished') {
   }
 }
 
-function insertDeleteRowColumn(type) {
+function insertDeleteRowColumn(type, handler) {
   const { data } = this;
   if (data.settings.mode === 'read') return;
   if (type === 'insert-row') {
@@ -523,6 +531,8 @@ function insertDeleteRowColumn(type) {
     data.setSelectedCellAttr('editable', true);
   } else if (type === 'cell-non-editable') {
     data.setSelectedCellAttr('editable', false);
+  } else if (typeof handler === 'function') {
+    handler(data);
   }
   clearClipboard.call(this);
   sheetReset.call(this);
@@ -595,11 +605,18 @@ function sheetInitEvents() {
       // the left mouse button: mousedown → mouseup → click
       // the right mouse button: mousedown → contenxtmenu → mouseup
       if (evt.buttons === 2) {
-        if (this.data.xyInSelectedRect(evt.offsetX, evt.offsetY)) {
-          contextMenu.setPosition(evt.offsetX, evt.offsetY);
+        const { offsetX, offsetY } = evt;
+        const { ci, ri } = this.data.getCellRectByXY(offsetX, offsetY);
+        const {
+          sri, eri, sci, eci,
+        } = this.data.selector.range;
+        const rowTitleOrColTitleInSelectedRect = (ci === -1 && ri >= sri && ri <= eri)
+        || (ri === -1 && ci >= sci && ci <= eci);
+        if (this.data.xyInSelectedRect(offsetX, offsetY) || rowTitleOrColTitleInSelectedRect) {
+          contextMenu.setPosition(offsetX, offsetY);
         } else {
           overlayerMousedown.call(this, evt);
-          contextMenu.setPosition(evt.offsetX, evt.offsetY);
+          contextMenu.setPosition(offsetX, offsetY);
         }
         evt.stopPropagation();
       } else if (evt.detail === 2) {
@@ -669,7 +686,7 @@ function sheetInitEvents() {
     }
   };
   // contextmenu
-  contextMenu.itemClick = (type) => {
+  contextMenu.itemClick = (type, handler) => {
     // console.log('type:', type);
     if (type === 'validation') {
       modalValidation.setValue(this.data.getSelectedValidation());
@@ -686,7 +703,7 @@ function sheetInitEvents() {
     } else if (type === 'hide') {
       hideRowsOrCols.call(this);
     } else {
-      insertDeleteRowColumn.call(this, type);
+      insertDeleteRowColumn.call(this, type, handler);
     }
   };
 
@@ -856,7 +873,9 @@ function sheetInitEvents() {
 export default class Sheet {
   constructor(targetEl, data) {
     this.eventMap = createEventEmitter();
-    const { view, showToolbar, showContextmenu } = data.settings;
+    const {
+      view, showToolbar, showContextmenu, contextMenuItems,
+    } = data.settings;
     this.el = h('div', `${cssPrefix}-sheet`);
     this.toolbar = new Toolbar(data, view.width, !showToolbar);
     this.print = new Print(data);
@@ -879,7 +898,7 @@ export default class Sheet {
     // data validation
     this.modalValidation = new ModalValidation();
     // contextMenu
-    this.contextMenu = new ContextMenu(() => this.getRect(), !showContextmenu);
+    this.contextMenu = new ContextMenu(() => this.getRect(), contextMenuItems, !showContextmenu);
     // selector
     this.selector = new Selector(data);
     this.overlayerCEl = h('div', `${cssPrefix}-overlayer-content`)

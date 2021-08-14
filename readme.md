@@ -1,19 +1,19 @@
 # x-spreadsheet
 
-[![npm package](https://img.shields.io/npm/v/x-data-spreadsheet.svg)](https://www.npmjs.org/package/x-data-spreadsheet)
-[![NPM downloads](http://img.shields.io/npm/dm/x-data-spreadsheet.svg)](https://npmjs.org/package/x-data-spreadsheet)
-[![NPM downloads](http://img.shields.io/npm/dt/x-data-spreadsheet.svg)](https://npmjs.org/package/x-data-spreadsheet)
-[![Build passing](https://travis-ci.org/myliang/x-spreadsheet.svg?branch=master)](https://travis-ci.org/myliang/x-spreadsheet)
-[![codecov](https://codecov.io/gh/myliang/x-spreadsheet/branch/master/graph/badge.svg)](https://codecov.io/gh/myliang/x-spreadsheet)
-![GitHub](https://img.shields.io/github/license/myliang/x-spreadsheet.svg)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/myliang/x-spreadsheet.svg)
+[![npm package](https://img.shields.io/npm/v/@wotaware/x-spreadsheet.svg)](https://npmjs.org/package/@wotaware/x-spreadsheet)
+[![NPM downloads](http://img.shields.io/npm/dm/@wotaware/x-spreadsheet.svg)](https://npmjs.org/package/@wotaware/x-spreadsheet)
+[![NPM downloads](http://img.shields.io/npm/dt/@wotaware/x-spreadsheet.svg)](https://npmjs.org/package/@wotaware/x-spreadsheet)
+[![Build passing](https://travis-ci.org/wotaware/x-spreadsheet.svg?branch=master)](https://travis-ci.org/wotaware/x-spreadsheet)
+[![codecov](https://codecov.io/gh/wotaware/x-spreadsheet/branch/master/graph/badge.svg)](https://codecov.io/gh/wotaware/x-spreadsheet)
+![GitHub](https://img.shields.io/github/license/wotaware/x-spreadsheet.svg)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/wotaware/x-spreadsheet.svg)
 [![Join the chat at https://gitter.im/x-datav/spreadsheet](https://badges.gitter.im/x-datav/spreadsheet.svg)](https://gitter.im/x-datav/spreadsheet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-> A web-based JavaScript spreadsheet
+> A web-based JavaScript spreadsheet (an enhanced version of [`myliang/x-spreadsheet`](https://github.com/myliang/x-spreadsheet))
 
 <p align="center">
-  <a href="https://github.com/myliang/x-spreadsheet">
-    <img width="100%" src="https://raw.githubusercontent.com/myliang/x-spreadsheet/master/docs/demo.png">
+  <a href="https://github.com/wotaware/x-spreadsheet">
+    <img width="100%" src="https://raw.githubusercontent.com/wotaware/x-spreadsheet/master/docs/demo.png">
   </a>
 </p>
 
@@ -23,8 +23,8 @@
 
 ## CDN
 ```html
-<link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet@1.1.5/dist/xspreadsheet.css">
-<script src="https://unpkg.com/x-data-spreadsheet@1.1.5/dist/xspreadsheet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@wotaware/x-spreadsheet@1.1.5/dist/xspreadsheet.css">
+<script src="https://unpkg.com/@wotaware/x-spreadsheet@1.1.5/dist/xspreadsheet.js"></script>
 
 <script>
    x_spreadsheet('#xspreadsheet');
@@ -34,7 +34,7 @@
 ## NPM
 
 ```shell
-npm install x-data-spreadsheet
+npm install @wotaware/x-spreadsheet
 ```
 
 ```html
@@ -42,7 +42,7 @@ npm install x-data-spreadsheet
 ```
 
 ```javascript
-import Spreadsheet from "x-data-spreadsheet";
+import Spreadsheet from "@wotaware/x-spreadsheet";
 // If you need to override the default options, you can set the override
 // const options = {};
 // new Spreadsheet('#x-spreadsheet-demo', options);
@@ -130,17 +130,17 @@ s.cellStyle(ri, ci);
 ## Internationalization
 ```javascript
 // npm 
-import Spreadsheet from 'x-data-spreadsheet';
-import zhCN from 'x-data-spreadsheet/dist/locale/zh-cn';
+import Spreadsheet from '@wotaware/x-spreadsheet';
+import zhCN from '@wotaware/x-spreadsheet/dist/locale/zh-cn';
 
 Spreadsheet.locale('zh-cn', zhCN);
 new Spreadsheet(document.getElementById('xss-demo'));
 ```
 ```html
 <!-- Import via CDN -->
-<link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet@1.1.5/dist/xspreadsheet.css">
-<script src="https://unpkg.com/x-data-spreadsheet@1.1.5/dist/xspreadsheet.js"></script>
-<script src="https://unpkg.com/x-data-spreadsheet@1.1.5/dist/locale/zh-cn.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@wotaware/x-spreadsheet@1.1.5/dist/xspreadsheet.css">
+<script src="https://unpkg.com/@wotaware/x-spreadsheet@1.1.5/dist/xspreadsheet.js"></script>
+<script src="https://unpkg.com/@wotaware/x-spreadsheet@1.1.5/dist/locale/zh-cn.js"></script>
 
 <script>
   x_spreadsheet.locale('zh-cn');
@@ -179,7 +179,7 @@ new Spreadsheet(document.getElementById('xss-demo'));
 ## Development
 
 ```sheel
-git clone https://github.com/myliang/x-spreadsheet.git
+git clone https://github.com/wotaware/x-spreadsheet.git
 cd x-spreadsheet
 npm install
 npm run dev

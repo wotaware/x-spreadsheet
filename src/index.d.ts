@@ -79,7 +79,7 @@ declare module '@wotaware/x-spreadsheet' {
    */
   export interface CellData {
     text: string;
-    style?: number;
+    style?: CellStyle | number;
     merge?: CellMerge;
   }
   /**

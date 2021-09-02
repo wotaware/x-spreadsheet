@@ -19,7 +19,7 @@
 
 ## Document
 * en
-* [zh-cn 中文](https://hondrytravis.github.io/x-spreadsheet-doc/)
+* [zh-cn 中文](https://hondrytravis.com/x-spreadsheet-doc/)
 
 ## CDN
 ```html

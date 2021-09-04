@@ -173,6 +173,10 @@
           console.log('cell:', cell, ', ri:', ri, ', ci:', ci);
         }).on('cell-edited', (text, ri, ci) => {
           console.log('text:', text, ', ri: ', ri, ', ci:', ci);
+        }).on('width-resized', (ci, width) => {
+          console.log('width resized: ', ci, width)
+        }).on('height-resized', (ri, height) => {
+          console.log('height resized: ', ri, height)
         });
 
       setTimeout(() => {

@@ -482,6 +482,7 @@ function rowResizerFinished(cRect, distance) {
   selector.resetAreaOffset();
   verticalScrollbarSet.call(this);
   editorSetOffset.call(this);
+  this.trigger('height-resized', ri, distance);
 }
 
 function colResizerFinished(cRect, distance) {
@@ -493,6 +494,7 @@ function colResizerFinished(cRect, distance) {
   selector.resetAreaOffset();
   horizontalScrollbarSet.call(this);
   editorSetOffset.call(this);
+  this.trigger('width-resized', ci, distance);
 }
 
 function dataSetCellText(text, state = 'finished') {

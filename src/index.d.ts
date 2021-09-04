@@ -49,25 +49,35 @@ declare module '@wotaware/x-spreadsheet' {
   export type CELL_SELECTED = 'cell-selected';
   export type CELLS_SELECTED = 'cells-selected';
   export type CELL_EDITED = 'cell-edited';
+  export type WIDTH_RESIZED = 'width-resized';
+  export type HEIGHT_RESIZED = 'height-resized';
 
   export type CellMerge = [number, number];
 
-  export interface SpreadsheetEventHandler {
+  export interface SpreadsheetEventHandler<ThisType> {
     (
       envt: CELL_SELECTED,
       callback: (cell: Cell, rowIndex: number, colIndex: number) => void
-    ): void;
+    ): ThisType;
     (
       envt: CELLS_SELECTED,
       callback: (
         cell: Cell,
         parameters: { sri: number; sci: number; eri: number; eci: number }
       ) => void
-    ): void;
+    ): ThisType;
     (
       evnt: CELL_EDITED,
       callback: (text: string, rowIndex: number, colIndex: number) => void
-    ): void;
+    ): ThisType;
+    (
+      evnt: WIDTH_RESIZED,
+      callback: (ci: number, width: number) => void
+    ): ThisType;
+    (
+      evnt: HEIGHT_RESIZED,
+      callback: (ri: number, height: number) => void
+    ): ThisType;
   }
 
   export interface ColProperties {
@@ -141,7 +151,7 @@ declare module '@wotaware/x-spreadsheet' {
 
   export default class Spreadsheet {
     constructor(container: string | HTMLElement, opts?: Options);
-    on: SpreadsheetEventHandler;
+    on: SpreadsheetEventHandler<Spreadsheet>;
     /**
      * retrieve cell
      * @param rowIndex {number} row index

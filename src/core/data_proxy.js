@@ -78,6 +78,10 @@ const defaultSettings = {
   showToolbar: true,
   showContextmenu: true,
   showBottomBar: true,
+  canCut: true,
+  canCopy: true,
+  canPaste: true,
+  canCellEdit: true,
   row: {
     len: 100,
     height: 25,

@@ -324,7 +324,7 @@ function clearClipboard() {
 
 function copy() {
   const { data, selector } = this;
-  if (data.settings.mode === 'read') return;
+  if (data.settings.mode === 'read' || data.settings.canCopy === false) return;
   data.copy();
   data.copyToSystemClipboard();
   selector.showClipboard();
@@ -332,14 +332,14 @@ function copy() {
 
 function cut() {
   const { data, selector } = this;
-  if (data.settings.mode === 'read') return;
+  if (data.settings.mode === 'read' || data.settings.canCut === false) return;
   data.cut();
   selector.showClipboard();
 }
 
 function paste(what, evt) {
   const { data } = this;
-  if (data.settings.mode === 'read') return;
+  if (data.settings.mode === 'read' || data.settings.canPaste === false) return;
   if (data.paste(what, msg => xtoast('Tip', msg))) {
     sheetReset.call(this);
   } else if (evt) {
@@ -450,7 +450,7 @@ function editorSetOffset() {
 
 function editorSet() {
   const { editor, data } = this;
-  if (data.settings.mode === 'read') return;
+  if (data.settings.mode === 'read' || data.settings.canCellEdit === false) return;
   editorSetOffset.call(this);
   editor.setCell(data.getSelectedCell(), data.getSelectedValidator());
   clearClipboard.call(this);
@@ -500,7 +500,7 @@ function colResizerFinished(cRect, distance) {
 function dataSetCellText(text, state = 'finished') {
   const { data, table } = this;
   // const [ri, ci] = selector.indexes;
-  if (data.settings.mode === 'read') return;
+  if (data.settings.mode === 'read' || data.settings.canCellEdit === false) return;
   data.setSelectedCellText(text, state);
   const { ri, ci } = data.selector;
   if (state === 'finished') {

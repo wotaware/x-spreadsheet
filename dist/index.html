@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>x-spreadsheet</title>
-    
 <link href="xspreadsheet.css" rel="stylesheet"></head>
 <body onload="load()">
   <div style="position: fixed; right: 0; top: .3em;">
@@ -54,6 +53,69 @@
       previewEl.width = 16
       previewEl.height = 16
 
+      const contextMenuItems = [
+        {
+          key: 'insert-row-above',
+          title: () => 'Insert row above',
+          available: mode => mode === 'row-title',
+          handler: data => {
+            const { range } = data.selector;
+            console.log('Insert row above', range);
+            data.insertTo('row', range, 1);
+          }
+        },
+        {
+          key: 'insert-row-below',
+          title: () => 'Insert row below',
+          available: mode => mode === 'row-title',
+          handler: data => {
+            const { range } = data.selector;
+            const realRange = { sci: range.sci, sri: range.sri + 1 };
+            console.log('Insert row below', realRange);
+            data.insertTo('row', realRange, 1);
+          }
+        },
+        {
+          key: 'delete-selected-rows',
+          title: () => 'Delete selected row(s)',
+          available: mode => mode === 'row-title',
+          handler: data => {
+            console.log('Delete selected row(s)', data);
+            data.delete('row');
+          }
+        },
+        {
+          key: 'insert-column-left',
+          title: () => 'Insert column left',
+          available: mode => mode === 'col-title',
+          handler: data => {
+            const { range } = data.selector;
+            console.log('Insert column left', range);
+            data.insertTo('column', range, 1);
+          }
+        },
+        {
+          key: 'insert-column-right',
+          title: () => 'Insert column right',
+          available: mode => mode === 'col-title',
+          handler: data => {
+            const { range } = data.selector;
+            const realRange = { sci: range.sci + 1, sri: range.sri };
+            console.log('Insert column right', realRange);
+            data.insertTo('column', realRange, 1);
+          }
+        },
+        {
+          key: 'delete-selected-columns',
+          title: () => 'Delete selected column(s)',
+          available: mode => mode === 'col-title',
+          handler: data => {
+            console.log('Delete selected column(s)', data);
+            data.delete('column');
+          }
+        }
+      ];
+
       var xs = x_spreadsheet('#x-spreadsheet-demo', {
         showToolbar: true,
         showGrid: true,
@@ -78,68 +140,7 @@
             }
           ],
         },
-        contextMenuItems: [
-          {
-            key: 'insert-row-above',
-            title: () => 'Insert row above',
-            available: mode => mode === 'row-title',
-            handler: data => {
-              const { range } = data.selector;
-              console.log('Insert row above', range);
-              data.insertTo('row', range, 1);
-            }
-          },
-          {
-            key: 'insert-row-below',
-            title: () => 'Insert row below',
-            available: mode => mode === 'row-title',
-            handler: data => {
-              const { range } = data.selector;
-              const realRange = { sci: range.sci, sri: range.sri + 1 };
-              console.log('Insert row below', realRange);
-              data.insertTo('row', realRange, 1);
-            }
-          },
-          {
-            key: 'delete-selected-rows',
-            title: () => 'Delete selected row(s)',
-            available: mode => mode === 'row-title',
-            handler: data => {
-              console.log('Delete selected row(s)', data);
-              data.delete('row');
-            }
-          },
-          {
-            key: 'insert-column-left',
-            title: () => 'Insert column left',
-            available: mode => mode === 'col-title',
-            handler: data => {
-              const { range } = data.selector;
-              console.log('Insert column left', range);
-              data.insertTo('column', range, 1);
-            }
-          },
-          {
-            key: 'insert-column-right',
-            title: () => 'Insert column right',
-            available: mode => mode === 'col-title',
-            handler: data => {
-              const { range } = data.selector;
-              const realRange = { sci: range.sci + 1, sri: range.sri };
-              console.log('Insert column right', realRange);
-              data.insertTo('column', realRange, 1);
-            }
-          },
-          {
-            key: 'delete-selected-columns',
-            title: () => 'Delete selected column(s)',
-            available: mode => mode === 'col-title',
-            handler: data => {
-              console.log('Delete selected column(s)', data);
-              data.delete('column');
-            }
-          }
-        ]
+        contextMenuItems,
       })
         .loadData([{
           freeze: 'B3',

@@ -11,6 +11,10 @@ declare module '@wotaware/x-spreadsheet' {
     showGrid?: boolean;
     showContextmenu?: boolean;
     showBottomBar?: boolean;
+    canCut?: boolean;
+    canCopy?: boolean;
+    canPaste?: boolean;
+    canCellEdit?: boolean;
     extendToolbar?: {
       left?: ExtendToolbarOption[],
       right?: ExtendToolbarOption[],

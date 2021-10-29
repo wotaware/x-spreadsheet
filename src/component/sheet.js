@@ -81,7 +81,6 @@ function selectorSet(multiple, ri, ci, indexesUpdated = true, moving = false) {
   } else {
     menuMode = 'range';
   }
-  contextMenu.setMode(menuMode);
   const cell = data.getCell(ri, ci);
   if (multiple) {
     selector.setEnd(ri, ci, moving);
@@ -91,6 +90,7 @@ function selectorSet(multiple, ri, ci, indexesUpdated = true, moving = false) {
     selector.set(ri, ci, indexesUpdated);
     this.trigger('cell-selected', cell, ri, ci);
   }
+  contextMenu.setMode(menuMode);
   toolbar.reset();
   table.render();
 }
